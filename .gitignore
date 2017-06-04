@@ -1,3 +1,4 @@
 .idea/**
 RawData/**
-OutData/**
+OutData/*
+**.pyc
