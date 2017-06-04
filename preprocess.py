@@ -23,25 +23,45 @@ def preprocess():
     rawDfs = loadRawData()
 
     trainDf = rawDfs['train']
-    print list(trainDf)
+
     trainDf = trainDf.drop('PassengerId', axis=1)
     trainDf = trainDf.drop('Name', axis=1)
 
-    # print trainDf[trainDf.Embarked.notnull()]
+    trainDf = yesNotoBinary(trainDf, 'Sex')
 
-    print list(trainDf)
     trainDf = trainDf[trainDf['Embarked'].notnull()]
-    print list(trainDf)
     trainDf = categoricalToNumeric(trainDf,'Embarked',multiple=False)
-    print list(trainDf)
     trainDf = trainDf.drop('Embarked', axis=1)
-    print list(trainDf)
+
+    #Change later
+    trainDf = trainDf.drop('Ticket', axis=1)
+    trainDf = trainDf.drop('Cabin', axis=1)
+    #######################################
 
     rawDfs['train'] = trainDf
     dfToCSV(trainDf,'train')
-
     return rawDfs
 
+# Convert binary to numerical e.g. Yes to 1 and No/NA to 0
+def yesNotoBinary(df, feature):
+    labels = {}
+
+    for row in range(0,len(df)):
+        label = str.lower(str(df.get_value(row,feature)))
+
+        if label not in labels.keys():
+            labels[label] = 1 - len(labels)
+
+        df.set_value(row,feature,labels[label])
+
+    # for row in range(0,len(df)):
+    #     if str.lower(str(df.get_value(row,feature))) in {'yes','y'}:
+    #         df.set_value(row,feature,1)
+    #     elif str.lower(str(df.get_value(row,feature))) in {'no','n','nan'}:
+    #         df.set_value(row,feature,0)
+
+    pd.to_numeric(df[feature])
+    return df
 
 #Convert categorical features to numerical features
 def categoricalToNumeric(df, col_name, multiple = False, min_seen_count = 0, extractFeatures=True, sourceDf=None):
