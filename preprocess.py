@@ -34,8 +34,10 @@ def preprocess():
     trainDf = trainDf.drop('Embarked', axis=1)
 
     #Change later
+    trainDf = trainDf[trainDf['Age'].notnull()]
     trainDf = trainDf.drop('Ticket', axis=1)
     trainDf = trainDf.drop('Cabin', axis=1)
+    trainDf = trainDf.drop('Embarked XXX_other', axis=1)
     #######################################
 
     rawDfs['train'] = trainDf
