@@ -19,29 +19,30 @@ def dfToCSV(df, fileName):
     with open(os.path.join(outDir,fileName + '.csv'),'wb') as file:
         df.to_csv(file, index=False)
 
-def preprocess():
+def preprocess(fileName):
     rawDfs = loadRawData()
 
-    trainDf = rawDfs['train']
+    df = rawDfs[fileName]
 
-    trainDf = trainDf.drop('PassengerId', axis=1)
-    trainDf = trainDf.drop('Name', axis=1)
+    # df = df.drop('PassengerId', axis=1)
+    df = df.drop('Name', axis=1)
 
-    trainDf = yesNotoBinary(trainDf, 'Sex')
+    df = yesNotoBinary(df, 'Sex')
 
-    trainDf = trainDf[trainDf['Embarked'].notnull()]
-    trainDf = categoricalToNumeric(trainDf,'Embarked',multiple=False)
-    trainDf = trainDf.drop('Embarked', axis=1)
+    df = df[df['Embarked'].notnull()]
+    df = categoricalToNumeric(df,'Embarked',multiple=False)
+    df = df.drop('Embarked', axis=1)
 
     #Change later
-    trainDf = trainDf[trainDf['Age'].notnull()]
-    trainDf = trainDf.drop('Ticket', axis=1)
-    trainDf = trainDf.drop('Cabin', axis=1)
-    trainDf = trainDf.drop('Embarked XXX_other', axis=1)
+    df = df[df['Age'].notnull()]
+    df = df.drop('Ticket', axis=1)
+    df = df.drop('Cabin', axis=1)
+    df = df.drop('Embarked XXX_other', axis=1)
+    df['Fare'] = df['Fare'].replace(to_replace='nan',value='0')
     #######################################
 
-    rawDfs['train'] = trainDf
-    dfToCSV(trainDf,'train')
+    rawDfs[fileName] = df
+    dfToCSV(df, fileName)
     return rawDfs
 
 # Convert binary to numerical e.g. Yes to 1 and No/NA to 0
@@ -55,12 +56,6 @@ def yesNotoBinary(df, feature):
             labels[label] = 1 - len(labels)
 
         df.set_value(row,feature,labels[label])
-
-    # for row in range(0,len(df)):
-    #     if str.lower(str(df.get_value(row,feature))) in {'yes','y'}:
-    #         df.set_value(row,feature,1)
-    #     elif str.lower(str(df.get_value(row,feature))) in {'no','n','nan'}:
-    #         df.set_value(row,feature,0)
 
     pd.to_numeric(df[feature])
     return df
@@ -119,4 +114,5 @@ def categoricalToNumeric(df, col_name, multiple = False, min_seen_count = 0, ext
 
 # Main function to run
 if __name__ == '__main__':
-    preprocess()
+    preprocess('train')
+    preprocess('test')
