@@ -33,11 +33,15 @@ def preprocess(fileName):
     df = categoricalToNumeric(df,'Embarked',multiple=False)
     df = df.drop('Embarked', axis=1)
 
+    df = categoricalToNumeric(df, 'Pclass', multiple=False)
+    df = df.drop('Pclass', axis=1)
+
     #Change later
     df['Age'] = df['Age'].replace(to_replace='nan', value='0')
     df = df.drop('Ticket', axis=1)
     df = df.drop('Cabin', axis=1)
     df = df.drop('Embarked XXX_other', axis=1)
+    df = df.drop('Pclass XXX_other', axis=1)
     df['Fare'] = df['Fare'].replace(to_replace='nan',value='0')
     #######################################
 
