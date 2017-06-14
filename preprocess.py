@@ -34,7 +34,7 @@ def preprocess(fileName):
     df = df.drop('Embarked', axis=1)
 
     #Change later
-    df = df[df['Age'].notnull()]
+    df['Age'] = df['Age'].replace(to_replace='nan', value='0')
     df = df.drop('Ticket', axis=1)
     df = df.drop('Cabin', axis=1)
     df = df.drop('Embarked XXX_other', axis=1)
