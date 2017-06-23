@@ -43,7 +43,7 @@ def preprocess(fileName):
     df = df.drop('Embarked XXX_other', axis=1)
     df = df.drop('Pclass XXX_other', axis=1)
 
-    df = df.drop('Fare', axis=1)
+    # df = df.drop('Fare', axis=1)
     # df['Fare'] = df['Fare'].replace(to_replace='nan',value='0')
     #######################################
 
