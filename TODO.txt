@@ -1,7 +1,5 @@
-One-hot encode Pclass (or not?), Embarked
 Think how to handle age, include rows with blank age and decide default value
 Think how to handle ticket (clustering, don't use initially, ...?)
-Drop columns having only one value for all records (Embarked XXX_other ...)
 Try using ticket later
 Use cabin later?
 Think how to handle blank fare (test.csv)

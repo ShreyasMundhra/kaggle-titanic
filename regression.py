@@ -4,8 +4,8 @@ import os
 from constants import dataDir
 from sklearn.linear_model import LinearRegression
 
-def linRegAge():
-    trainDf = pd.read_csv(os.path.join(dataDir, 'train' + '.csv'))
+def linRegAge(trainDf=None):
+    # trainDf = pd.read_csv(os.path.join(dataDir, 'train' + '.csv'))
     # cleanTrainDf = trainDf[trainDf['Age'].notnull()]
 
     derivedDf = pd.DataFrame()
@@ -30,12 +30,18 @@ def linRegAge():
     model = LinearRegression().fit(cleanX, ageList)
     missingDerivedDf['Age'] = model.predict(missingX)
 
-    # derivedDf['Age'] = ageList
 
-    with open(os.path.join('Scratchpad','age_regression' + '.csv'),'wb') as file:
-        missingDerivedDf.to_csv(file, index=False)
+    trainDf['Age'] = trainDf['Age'].fillna(value=missingDerivedDf['Age'])
+
+
+    # with open(os.path.join('Scratchpad','age_regression' + '.csv'),'wb') as file:
+    #     missingDerivedDf.to_csv(file, index=False)
+    #     trainDf.to_csv(file, index=False)
+
+
+    return trainDf
 
 
 # Main function to run
-if __name__ == '__main__':
-    linRegAge()
+# if __name__ == '__main__':
+#     linRegAge()

@@ -3,6 +3,7 @@ import pandas as pd
 import os
 from collections import Counter
 from constants import dataDir, outDir
+from regression import linRegAge
 
 # Load raw datasets
 def loadRawData():
@@ -37,13 +38,15 @@ def preprocess(fileName):
     df = df.drop('Pclass', axis=1)
 
     #Change later
-    df['Age'] = df['Age'].replace(to_replace='nan', value='0')
+    # df['Age'] = df['Age'].replace(to_replace='nan', value='0')
     df = df.drop('Ticket', axis=1)
     df = df.drop('Cabin', axis=1)
     df = df.drop('Embarked XXX_other', axis=1)
     df = df.drop('Pclass XXX_other', axis=1)
     df['Fare'] = df['Fare'].replace(to_replace='nan',value='0')
     #######################################
+
+    df = linRegAge(df)
 
     rawDfs[fileName] = df
     dfToCSV(df, fileName)
