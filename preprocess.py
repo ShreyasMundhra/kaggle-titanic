@@ -25,6 +25,7 @@ def preprocess(fileName):
     df = rawDfs[fileName]
 
     # df = df.drop('PassengerId', axis=1)
+    df = getSalutations(df)
     df = df.drop('Name', axis=1)
 
     df = yesNotoBinary(df, 'Sex')
@@ -50,6 +51,23 @@ def preprocess(fileName):
     rawDfs[fileName] = df
     dfToCSV(df, fileName)
     return rawDfs
+
+def getSalutations(df):
+    categories = {'Mr': ['Mr','Major','Don','Sir','Capt','Rev','Dr','Jonkheer','Col'],
+                  'Mrs': ['Mrs','Mme'],
+                  'Master': ['Master'],
+                  'Miss': ['Miss','the Countess','Mlle','Lady','Dona','Ms',]}
+
+    names = df['Name']
+    salutations = [name.split(',')[1].split('.')[0][1:] for name in names]
+    for i in range(0,len(salutations)):
+        for key in categories:
+            if salutations[i] in categories[key]:
+                salutations[i] = key
+                break
+
+    df['Salutation'] = salutations
+    return df
 
 # Convert binary to numerical e.g. Yes to 1 and No/NA to 0
 def yesNotoBinary(df, feature):

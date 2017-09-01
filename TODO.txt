@@ -1,5 +1,7 @@
+Commit and use salutations also for training
 Think how to handle age, include rows with blank age and decide default value
 Think how to handle ticket (clustering, don't use initially, ...?)
 Try using ticket later
 Use cabin later?
 Think how to handle blank fare (test.csv)
+Try using bayes classifier
